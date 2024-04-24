@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Laundry - Create Timing{% endblock %}
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<style>
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 50px; /* Increased gap for better visual separation */
+    padding: 50px 0;
+  }
+  .laundry-machine {
+    flex-shrink: 0; /* Prevent the image from shrinking */
+    width: 35%; /* Width as a percentage for dynamic scaling */
+    max-width: 300px; /* Max width to maintain aspect ratio */
+    height: auto; /* Keep the height proportional */
+  }
+  .form-container {
+    flex-grow: 1; /* Allow the form container to grow */
+    max-width: 400px; /* Max width to prevent it from getting too large */
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .form-group {
+    margin-bottom: 20px;
+  }
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  .btn-primary {
+    width: auto; /* Allow the button to size to its content */
+    padding: 10px 20px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.2s ease-in-out;
+  }
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+</style>
+{% if error_message %}
+<div class="alert alert-danger">
+  {{ error_message }}
+</div>
+{% endif %}
+
+<div class="container">
+    <img class="laundry-machine" src="{{ url_for('static', filename='img/laundry_machine.png') }}" alt="Laundry Machine"/>
+    <div class="form-container">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ render_field(form.machine_id, class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ render_field(form.status, class="form-control", readonly=true) }}
+            </div>
+            <div class="form-group">
+                {{ render_field(form.model, class="form-control", readonly=true) }}
+            </div>
+            <div class="form-group">
+                {{ render_field(form.capacity, class="form-control", readonly=true) }}
+            </div>
+            <div class="form-group">
+                {{ render_field(form.price_per_use, class="form-control", readonly=true) }}
+            </div>
+            <div class="form-group">
+                {{ render_field(form.date, class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ render_field(form.time_slot, class="form-control") }}
+            </div>
+            <input type="submit" value="Add to cart" class="btn btn-primary"/>
+        </form>
+    </div>
+</div>
+{% endblock %}

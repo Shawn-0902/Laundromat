@@ -1,0 +1,53 @@
+{% extends "basea.html" %}
+
+{% block title %}Laundry Machine System - Machine Page{% endblock %}
+
+{% block content %}
+<div id="salesChart" style="width: 100%; height: 500px;"></div>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+    // Load the Visualization API and the corechart package.
+    google.charts.load('current', {'packages':['corechart']});
+
+    // Set a callback to run when the Google Visualization API is loaded.
+    google.charts.setOnLoadCallback(fetchSalesData);
+
+    function drawChart(chartData) {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Date');
+        data.addColumn('number', 'Booking Number');  // Label for the Y-axis
+
+        chartData.dates.forEach((date, index) => {
+            data.addRow([date, chartData.sales[index]]);
+        });
+
+        var options = {
+            title: 'Daily Number OF Bookings',
+            curveType: 'function',
+            legend: { position: 'bottom' },
+            vAxis: {title: 'Number of Bookings'},
+            hAxis: {title: 'Date'}
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('salesChart'));
+        chart.draw(data, options);
+    }
+
+    function fetchSalesData() {
+        fetch('/sales_data')
+            .then(response => response.json())
+            .then(data => {
+                drawChart(data);
+            })
+            .catch(error => console.error('Error fetching sales data:', error));
+    }
+
+    // Optional: If you want to refresh the data periodically
+    document.addEventListener('DOMContentLoaded', function() {
+        setInterval(fetchSalesData, 5000); // Fetch data every 5 seconds
+    });
+</script>
+{% endblock %}
+
+

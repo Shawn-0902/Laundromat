@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Laundry Room - Booking System{% endblock %}
+
+{% block content %}
+<style>
+  .display-4 {
+    text-align: center;
+    margin-bottom: 1rem; /* Reduced bottom margin */
+  }
+  .container {
+    padding: 1rem;
+    width: 100%; /* Full width */
+    max-width: 1200px; /* Maximum container width */
+    margin: auto; /* Center container */
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Center cards horizontally */
+    gap: 1rem; /* Spacing between cards */
+  }
+  .col {
+    flex: 1; /* Flex grow to fill available space */
+    min-width: 250px; /* Minimum width of the card */
+    max-width: 300px; /* Maximum width of the card */
+  }
+  .card {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    margin-bottom: 1rem; /* Space below card */
+    text-align: center; /* Center text */
+  }
+  .card-img-top {
+    width: 100%; /* Full width */
+    height: auto; /* Maintain aspect ratio */
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+  .card-body {
+    padding: 1rem;
+    background-color: #fff;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+  .card-title, .card-text, .btn {
+    margin-bottom: 0.5rem; /* Consistent spacing */
+  }
+  .btn {
+    display: inline-block; /* Align button correctly */
+    width: auto; /* Auto width based on content */
+    padding: 0.5rem 1rem; /* Padding */
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  .btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+  }
+  .btn-success {
+    background-color: #28a745;
+    color: #fff;
+  }
+</style>
+
+<h1 class="display-4">Booking Page</h1>
+<div class="container">
+    {% if count == 0 %}
+        <p>There are no machines available.</p>
+    {% else %}
+        <div class="row">
+            {% for machine in machine_list %}
+                <div class="col">
+                    <div class="card">
+                        <img src="{{ url_for('static', filename='img/laundry_machine.png') }}" class="card-img-top" alt="Machine Image">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ machine.get_model() }}</h5>
+                            <p class="card-text">
+                                Status: {{ machine.get_status() }}<br>
+                                Capacity: {{ machine.get_capacity() }} kg<br>
+                                Price: ${{ machine.get_price_per_use() }}
+                            </p>
+                            {% if machine.get_status() == 'Under Maintenance' %}
+                                <a href="/maintenance_page" class="btn btn-danger">Under Maintenance</a>
+                            {% elif machine.get_status() == 'Available' %}
+                                <a href="/timings/{{ machine.get_machine_id() }}/{{ machine.get_status() }}/{{ machine.get_model() }}/{{ machine.get_capacity() }}/{{ machine.get_price_per_use() }}" class="btn btn-success">Book Now</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+
+

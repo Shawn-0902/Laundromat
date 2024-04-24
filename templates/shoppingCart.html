@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Laundry - Shopping cart{% endblock %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/shoppingCart.css')}}">
+
+<h1 class="display-4">shopping cart</h1>
+<div>
+{% if count == 0 %}
+<p>There are no items.</p>
+{% else %}
+<p>There are {{ count }} items.</p>
+{% endif %}
+</div>
+<div>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Product Information</th>
+<th>Status</th>
+<th>Model</th>
+<th>Capacity</th>
+<th>Price </th>
+<th>Date & Time</th>
+</tr>
+</thead>
+<tbody>
+{% for item in cart_list %}
+<tr>
+<td>{{ item.get_machine_id() }}</td>
+<td>{{ item.get_status() }}</td>
+<td class="model-cell"> <img class="laundry-machine" src="static/img/laundry_machine.png" /><br>{{ item.get_model() }}</td>
+<td>{{ item.get_capacity() }} Kg</td>
+<td>${{ item.get_price_per_use() }}</td>
+<td>{{ item.get_date() }} <br> {{ item.get_time_slot() }}</td>
+
+<td><a href="/updateCart/{{ item.get_booking_id() }}" class="btn btn-warning">Update</a></td>
+<td>
+    <form action="{{ url_for('delete_cart_item', id=item.get_booking_id()) }}" method="POST">
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{ item.get_booking_id() }}">
+            Delete
+        </button>
+        <div class="modal" id="myModal_{{ item.get_booking_id() }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Delete Confirmation</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this item booked for {{ item.get_date() }} at {{ item.get_time_slot() }}?
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" value="Delete" class="btn btn-danger">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</td>
+</tr>
+{% endfor %}
+
+</tbody>
+</table>
+</div>
+
+{% if count > 0 %}
+<div class="checkout-area">
+    <h3>Total Price: ${{ total_price }}</h3>
+    <a href="/checkout" class="btn btn-success btn-lg">Checkout</a>
+</div>
+{% endif %}
+
+{% endblock %}
+

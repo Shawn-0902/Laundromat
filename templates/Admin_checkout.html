@@ -1,0 +1,117 @@
+{% extends "basea.html" %}
+{% block title %}Admin Checkout - Sales and Checkout Details{% endblock %}
+{% block content %}
+<style>
+  .container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+  }
+  .container h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 1rem;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+  }
+  table, th, td {
+    border: 1px solid #ddd;
+  }
+  th {
+    background-color: #f8f9fa;
+    color: #333;
+    padding: 0.75rem;
+    text-align: left;
+  }
+  td {
+    padding: 0.75rem;
+    color: #555;
+  }
+  th:first-child, td:first-child {
+    border-left: none;
+  }
+  th:last-child, td:last-child {
+    border-right: none;
+  }
+  tbody tr:nth-child(odd) {
+    background-color: #f2f2f2;
+  }
+  tbody tr:hover {
+    background-color: #e9ecef;
+  }
+  .no-records {
+    text-align: center;
+    padding: 2rem;
+    color: #888;
+  }
+</style>
+<br>
+<div class="container">
+    <h2>Sales Records</h2>
+    {% if sales_list %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Sale ID</th>
+                    <th>Machine ID</th>
+                    <th>Date</th>
+                    <th>Time Slot</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sale in sales_list %}
+                    <tr>
+                        <td>{{ sale.get_sale_id() }}</td>
+                        <td>{{ sale.get_machine_id() }}</td>
+                        <td>{{ sale.get_date() }}</td>
+                        <td>{{ sale.get_time_slot() }}</td>
+                        <td>{{ sale.get_price_per_use() }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No sales records found.</p>
+    {% endif %}
+</div>
+
+<br>
+<div class="container">
+    <h2>Checkout Information</h2>
+    {% if checkout_info_list %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Checkout ID</th>
+                    <th>Customer Email</th>
+                    <th>Name</th>
+                    <th>Card Number</th>
+                    <!-- Add more headers as needed -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for info in checkout_info_list %}
+                    <tr>
+                        <td>{{ info.get_checkout_id() }}</td>
+                        <td>{{ info.get_customer_email() }}</td>
+                        <td>{{ info.get_first_name() }} {{ info.get_last_name() }}</td>
+                        <td>**** **** **** {{ info.get_card_number()[-4:] }}</td> <!-- Mask card number for security -->
+                        <!-- Add more details as needed -->
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No checkout information found.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+

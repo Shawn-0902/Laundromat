@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block title %}Checkout - Complete Your Purchase{% endblock %}
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<style>
+  .checkout-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #eaeaea;
+  }
+  .checkout-container h2 {
+    font-size: 24px;
+    color: #333;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eaeaea;
+  }
+  .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 5px;
+    font-size: 16px;
+    height: 40px; /* Fixed height for better alignment */
+  }
+  .form-group label {
+    width: 100%;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+  .btn-primary {
+    color: #fff;
+    background-color: #0056b3;
+    border-color: #004085;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 18px;
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    box-sizing: border-box;
+    transition: background-color 0.15s ease-in-out;
+  }
+  .btn-primary:hover {
+    background-color: #003d7a;
+  }
+  .total-price-section {
+    font-size: 18px;
+    font-weight: 600;
+    text-align: right;
+    padding: 15px 0;
+    border-top: 1px solid #eaeaea;
+    margin-top: 20px;
+  }
+  .table {
+    width: 100%;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+  }
+  .table th, .table td {
+    padding: 10px;
+    border: 1px solid #eaeaea;
+    text-align: left;
+  }
+  .table th {
+    background-color: #f9f9f9;
+  }
+</style>
+
+<div class="checkout-container">
+    <!-- Shopping Cart Items Display -->
+    <div class="cart-items-section">
+        <h2>Your Cart Items</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Model</th>
+                    <th>Capacity</th>
+                    <th>Price Per Use</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_list %}
+                <tr>
+                    <td>{{ item.get_machine_id() }}</td>
+                    <td>{{ item.get_model() }}</td>
+                    <td>{{ item.get_capacity() }} kg</td>
+                    <td>${{ item.get_price_per_use() }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+    <!-- Checkout Form -->
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <h2>Checkout Details</h2>
+        <div class="form-group">
+            {{ render_field(form.customer_email, class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ render_field(form.first_name, class="form-control") }} {{ render_field(form.last_name, class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ render_field(form.card_number, class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ render_field(form.cvv, class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ render_field(form.billing_address, class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ render_field(form.expiry_date_month, class="form-control") }} {{ render_field(form.expiry_date_day, class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ render_field(form.email_notification, class="form-control") }}
+        </div>
+
+        <!-- Total Price Display -->
+    <div class="total-price-section">
+        <h3>Total Price: ${{ total_price }}</h3>
+    </div>
+
+        <input type="submit" value="Complete Checkout" class="btn btn-primary"/>
+    </form>
+</div>
+
+{% endblock %}

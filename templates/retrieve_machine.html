@@ -1,0 +1,65 @@
+{% extends "basea.html" %}
+{% block title %}Laundry Machine System - Machine Page{% endblock %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/retrieve_machine.css')}}">
+<br>
+<a href="/add_machine" class="btn btn-success">Add Machine</a>
+<br>
+<div class="container">
+
+
+    {% if count == 0 %}
+        <p>There are no machines available.</p>
+    {% else %}
+        <div class="row">
+            {% for machine in machine_list %}
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100">
+                        <img src="{{ url_for('static', filename='img/laundry_machine.png') }}" class="card-img-top" alt="Machine Image">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ machine.get_model() }}</h5>
+                            <p class="card-text">
+                                Machine ID: {{ machine.get_machine_id() }}<br>
+                                Status: {{ machine.get_status() }}<br>
+                                Capacity: {{ machine.get_capacity() }} kg<br>
+                                Price per Use: ${{ machine.get_price_per_use() }}
+                            </p>
+                        </div>
+                        <a href="{{ url_for('update_machine', machine_id=machine.get_machine_id()) }}" class="btn btn-primary">Update</a>
+                        <form action="{{ url_for('delete_machine', machine_id=machine.get_machine_id()) }}" method="POST">
+    <!-- Button to Open the Modal -->
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{ machine.get_machine_id() }}">
+        Delete
+    </button>
+    <!-- The Modal -->
+    <div class="modal" id="myModal_{{ machine.get_machine_id() }}">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Confirmation</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    Are you sure you want to delete this machine: {{ machine.get_model() }} with ID {{ machine.get_machine_id() }}?
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <input type="submit" value="Delete" class="btn btn-danger">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+

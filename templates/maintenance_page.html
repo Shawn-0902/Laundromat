@@ -1,0 +1,20 @@
+
+{% block title %}{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/maintenance.css') }}">
+{% endblock %}
+{% block navbar %}{% endblock %}
+{% block content %}
+<div id="maintenance">
+    <div class="maintenance-info">
+        <div class="maintenance-header">
+            <h1>Sorry for the Inconvenience</h1>
+        </div>
+        <h2>Machine Under Maintenance</h2>
+        <p>This machine is currently under maintenance. We are working to get it back up and running as soon as possible. Thank you for your understanding and patience.</p>
+        <a href="/book_page" class="btn btn-danger">Return</a>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}{% endblock %}
+
